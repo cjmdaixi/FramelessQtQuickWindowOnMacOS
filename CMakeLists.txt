@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
 
 qt_add_executable(appFramelessQuickDemo
-    main.cpp MacWindow.h MacWindow.mm
+    main.cpp framelesswindow.h framelesswindow.mm
 )
 
 qt_add_qml_module(appFramelessQuickDemo
