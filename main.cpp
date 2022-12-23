@@ -4,8 +4,6 @@
 #include <QQmlContext>
 #include <QQuickView>
 
-#include "framelesswindow.h"
-
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -17,9 +15,6 @@ int main(int argc, char *argv[])
         &app, [url](QObject *obj, const QUrl &objUrl) {
             if (!obj && url == objUrl)
                 QCoreApplication::exit(-1);
-            else{
-                FramelessWindow::initialize(obj);
-            }
         }, Qt::QueuedConnection);
     engine.load(url);
     return app.exec();

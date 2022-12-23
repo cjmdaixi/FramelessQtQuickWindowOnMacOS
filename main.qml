@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls 2.2
+import FramelessQuickDemo
 
 ApplicationWindow {
     id: window
@@ -7,6 +8,8 @@ ApplicationWindow {
     height: 480
     visible: true
     title: qsTr("Hello World")
+
+    FramelessController.enabled: true
 
     background: Rectangle{
         gradient:Gradient {
@@ -24,6 +27,14 @@ ApplicationWindow {
         DragHandler {
             onActiveChanged: if (active) window.startSystemMove();
             target: null
+        }
+    }
+
+    Button{
+        anchors.centerIn: parent
+        text: "Change"
+        onClicked:{
+            window.FramelessController.enabled = !window.FramelessController.enabled;
         }
     }
 }
