@@ -4,29 +4,6 @@
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 
-namespace FramelessWindow{
-
-void initialize(QObject* appWindow)
-{
-    QWindow* win = qobject_cast<QWindow*>(appWindow);
-    NSView* view = reinterpret_cast<NSView*>(win->winId());
-    NSWindow* window = [view window];
-
-    // imersive title bar
-    [window setStyleMask:[window styleMask] | NSWindowStyleMaskFullSizeContentView];
-    [window setTitlebarAppearsTransparent:YES];
-    [window setTitleVisibility:NSWindowTitleHidden];
-
-    NSButton* minBtn = [window standardWindowButton:NSWindowMiniaturizeButton];
-    NSButton* maxBtn = [window standardWindowButton:NSWindowZoomButton];
-    NSButton* closeBtn = [window standardWindowButton:NSWindowCloseButton];
-
-    [minBtn setHidden:YES];
-    [maxBtn setHidden:YES];
-    [closeBtn setHidden:NO];
-}
-}
-
 FramelessAttachedType::FramelessAttachedType(QObject *parent)
     : QObject(parent)
 {
@@ -66,18 +43,13 @@ void FramelessAttachedType::setEnabled(bool newEnabled)
 
 bool FramelessAttachedType::minButtonVisible() const
 {
-    QWindow* win = qobject_cast<QWindow*>(parent());
-    NSView* view = reinterpret_cast<NSView*>(win->winId());
-    NSWindow* window = [view window];
-
-    NSButton* minBtn = [window standardWindowButton:NSWindowMiniaturizeButton];
-
-    bool isVisible = [minBtn isHidden];
-    return isVisible;
+    return m_minButtonVisible;
 }
 
 void FramelessAttachedType::setMinButtonVisible(bool newMinButtonVisible)
 {
+    if(m_minButtonVisible == newMinButtonVisible) return;
+
     QWindow* win = qobject_cast<QWindow*>(parent());
     NSView* view = reinterpret_cast<NSView*>(win->winId());
     NSWindow* window = [view window];
@@ -85,7 +57,59 @@ void FramelessAttachedType::setMinButtonVisible(bool newMinButtonVisible)
     NSButton* minBtn = [window standardWindowButton:NSWindowMiniaturizeButton];
 
     if(newMinButtonVisible)
-      [minBtn setHidden:NO];
+        [minBtn setHidden:NO];
     else
         [minBtn setHidden:YES];
+    m_minButtonVisible = newMinButtonVisible;
+    emit minButtonVisibleChanged();
+}
+
+bool FramelessAttachedType::maxButtonVisible() const
+{
+    return m_maxButtonVisible;
+}
+
+void FramelessAttachedType::setMaxButtonVisible(bool newMaxButtonVisible)
+{
+    if (m_maxButtonVisible == newMaxButtonVisible)
+        return;
+
+    QWindow* win = qobject_cast<QWindow*>(parent());
+    NSView* view = reinterpret_cast<NSView*>(win->winId());
+    NSWindow* window = [view window];
+
+    NSButton* maxBtn = [window standardWindowButton:NSWindowZoomButton];
+
+    if(newMaxButtonVisible)
+        [maxBtn setHidden:NO];
+    else
+        [maxBtn setHidden:YES];
+
+    m_maxButtonVisible = newMaxButtonVisible;
+    emit maxButtonVisibleChanged();
+}
+
+bool FramelessAttachedType::closeButtonVisible() const
+{
+    return m_closeButtonVisible;
+}
+
+void FramelessAttachedType::setCloseButtonVisible(bool newCloseButtonVisible)
+{
+    if (m_closeButtonVisible == newCloseButtonVisible)
+        return;
+
+    QWindow* win = qobject_cast<QWindow*>(parent());
+    NSView* view = reinterpret_cast<NSView*>(win->winId());
+    NSWindow* window = [view window];
+
+    NSButton* closeBtn = [window standardWindowButton:NSWindowCloseButton];
+
+    if(newCloseButtonVisible)
+        [closeBtn setHidden:NO];
+    else
+        [closeBtn setHidden:YES];
+
+    m_closeButtonVisible = newCloseButtonVisible;
+    emit closeButtonVisibleChanged();
 }

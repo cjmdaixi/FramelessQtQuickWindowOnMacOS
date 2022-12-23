@@ -9,7 +9,7 @@ ApplicationWindow {
     visible: true
     title: qsTr("Hello World")
 
-    FramelessController.enabled: true
+    Frameless.enabled: true
 
     background: Rectangle{
         gradient:Gradient {
@@ -30,11 +30,34 @@ ApplicationWindow {
         }
     }
 
-    Button{
+    Column{
         anchors.centerIn: parent
-        text: "Change"
-        onClicked:{
-            window.FramelessController.enabled = !window.FramelessController.enabled;
+        spacing: 10
+        Button{
+            text: "Change Enabled"
+            onClicked:{
+                window.Frameless.enabled = !window.Frameless.enabled;
+            }
+        }
+        Button{
+            text: "Change close button"
+            onClicked:{
+                window.Frameless.closeButtonVisible = !window.Frameless.closeButtonVisible;
+            }
+        }
+        Button{
+            text: "Change min button"
+            onClicked:{
+                window.Frameless.minButtonVisible = !window.Frameless.minButtonVisible;
+            }
+        }
+        Button{
+            text: "Change zoom button"
+            onClicked:{
+                window.Frameless.maxButtonVisible = !window.Frameless.maxButtonVisible;
+            }
         }
     }
+
+
 }
